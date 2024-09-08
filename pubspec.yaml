@@ -72,6 +72,7 @@ flutter:
         - asset: assets/fonts/SUSE/static/SUSE-Regular.ttf
   assets:
     - assets/images/flags/eu.png
+    - assets/images/icons/swap.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
