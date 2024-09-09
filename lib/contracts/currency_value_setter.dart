@@ -1,3 +1,3 @@
-abstract class CurrencyValueSetter {
+abstract class CCValueSetter {
   void setValue(double value);
 }

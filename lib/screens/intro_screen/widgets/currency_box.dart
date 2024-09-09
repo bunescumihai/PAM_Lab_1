@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import '../../../business_logic/currency_converter.dart';
 import '../../../contracts/currency_value_setter.dart';
 
-class CurrencyBox extends StatefulWidget implements CurrencyValueSetter {
+class CurrencyBox extends StatefulWidget implements CCValueSetter {
   CurrencyBox({super.key, required String boxName}){
     this._boxName = boxName;
   }
@@ -119,6 +119,7 @@ class _CurrencyBoxState extends State<CurrencyBox> {
                     if (value is int) {
                       setState(() {
                         _dropdownValue = value;
+                        widget._currencyConverter?.setCurrency(widget, value);
                       });
                     }
                   },
@@ -128,18 +129,21 @@ class _CurrencyBoxState extends State<CurrencyBox> {
                 child: Container(
                   margin: EdgeInsets.only(left: 30),
                   height: 45,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(10, 10, 10, 0.08),
+                    borderRadius: BorderRadius.circular(10)
+                  ),
                   child: TextField(
                     textAlign: TextAlign.end,
                     controller: TextEditingController(text: _inputValue),
                     decoration: InputDecoration(
                       hintStyle: TextStyle(color: Colors.grey),
                       hintText: '0',
+
                       enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 2),
-                          borderRadius: BorderRadius.circular(10)),
+                          borderSide: BorderSide.none),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2),
-                          borderRadius: BorderRadius.circular(10)),
+                          borderSide: BorderSide.none)
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
