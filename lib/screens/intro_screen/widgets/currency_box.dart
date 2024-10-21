@@ -1,31 +1,37 @@
 import 'package:country_flags/country_flags.dart';
+import 'package:currency_converter/contracts/currency_setter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../business_logic/currency_converter.dart';
 import '../../../contracts/currency_value_setter.dart';
 
-class CurrencyBox extends StatefulWidget implements CCValueSetter {
-  CurrencyBox({super.key, required String boxName}){
-    this._boxName = boxName;
-  }
+class CurrencyBox extends StatefulWidget implements CCCurrencySetter {
+
   late String _boxName;
-
-  CurrencyConverter? _currencyConverter;
-
-  setCurrencyConverter(CurrencyConverter currencyConverter) {
-    _currencyConverter = currencyConverter;
-  }
+  late CurrencyConverter _currencyConverter;
 
   final _CurrencyBoxState _state = _CurrencyBoxState();
 
   @override
   State<CurrencyBox> createState() => _state;
 
+  CurrencyBox({super.key, required String boxName}){
+    this._boxName = boxName;
+  }
+
+  setCurrencyConverter(CurrencyConverter currencyConverter) {
+    _currencyConverter = currencyConverter;
+  }
+
   @override
   void setValue(double value) {
-
     _state.updateValue(value);
+  }
+
+  @override
+  void setCurrency(int value) {
+    _state.updateCurrency(value);
   }
 }
 
@@ -117,10 +123,8 @@ class _CurrencyBoxState extends State<CurrencyBox> {
                   value: _dropdownValue,
                   onChanged: (value) {
                     if (value is int) {
-                      setState(() {
-                        _dropdownValue = value;
-                        widget._currencyConverter?.setCurrency(widget, value);
-                      });
+                      updateCurrency(value);
+                      widget._currencyConverter.setCurrency(widget, value);
                     }
                   },
                 ),
@@ -160,7 +164,7 @@ class _CurrencyBoxState extends State<CurrencyBox> {
                         parsed = 0;
                       }
                       _inputValue = value;
-                      widget._currencyConverter?.setValue(widget, parsed);
+                      widget._currencyConverter.setValue(widget, parsed);
                     },
                   ),
                 ),
@@ -174,7 +178,17 @@ class _CurrencyBoxState extends State<CurrencyBox> {
 
   void updateValue(double value) {
     setState(() {
-      _inputValue = value.toString();
+      if(value == 0){
+        _inputValue = "";
+      }
+      else
+      _inputValue = value.toStringAsFixed(2);
+    });
+  }
+
+  void updateCurrency(int value) {
+    setState(() {
+      _dropdownValue = value;
     });
   }
 }
